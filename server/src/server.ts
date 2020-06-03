@@ -1,31 +1,20 @@
 import express from 'express';
+import routes from './routes';
+import path from 'path';
+import cors from 'cors';
 
 const app = express();
 
-const users = [
-    'Diego',
-    'Cleiton',
-    'Robson',
-    'Daniel'
-];
+app.use(cors());
+app.use(express.json());
+app.use(routes);
 
-app.get('/users', (req, res) => {
-    console.log('Listagem de usuários.');
-    return res.json(users)
-});
+app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
 
-app.get('/users/:id', (req, res) => {
-    const id = Number(req.params.id);
-    return res.json(users[id])
-});
-
-app.post('/users', (req, res) => {
-    const user = {
-        name: 'Nina',
-        age: 22,
-    };
-
-    return res.json(user);
+app.get('*', (req, res) => {
+    res.status(200).send({
+        message: 'Welcome to this API!'
+    });
 });
 
 app.listen(3333)
